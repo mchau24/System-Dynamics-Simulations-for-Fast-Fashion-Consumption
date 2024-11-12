@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
+	<header>
+		<smile version="1.0" namespace="std, isee"/>
+		<name>Need for clothes</name>
+		<uuid>eab7ba0f-8bb8-4474-a741-3cb411ff6b43</uuid>
+		<vendor>isee systems, inc.</vendor>
+		<product version="1.1.2" isee:build_number="0763" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+	</header>
+	<sim_specs isee:simulation_delay="0.0262295" method="Euler" time_units="months" isee:pause_after_rates="false" isee:instantaneous_flows="true">
+		<start>0</start>
+		<stop>60</stop>
+		<dt reciprocal="true">4</dt>
+	</sim_specs>
+	<isee:prefs show_module_prefix="true" layer="model" saved_runs="5"/>
+	<model_units>
+		<unit name="English Pounds">
+			<eqn/>
+			<alias>GBP</alias>
+			<alias>english pound</alias>
+			<alias>uk pound</alias>
+			<alias>uk pounds</alias>
+		</unit>
+		<unit name="Months">
+			<eqn/>
+			<alias>mo</alias>
+			<alias>month</alias>
+		</unit>
+	</model_units>
+	<isee:sensi_specs run="false" method="multivariate" runs="0"/>
+	<model>
+		<variables>
+			<stock name="Clothes inventory 1">
+				<eqn>6</eqn>
+				<inflow>New_clothes_1</inflow>
+				<outflow>Discarded_clothes_1</outflow>
+				<non_negative/>
+				<units>Items</units>
+			</stock>
+			<stock name="Savings 1">
+				<eqn>500</eqn>
+				<inflow>New_saving_1</inflow>
+				<outflow>Spending_on_clothes_1</outflow>
+				<non_negative/>
+				<units>English Pounds</units>
+			</stock>
+			<aux name="Desired inventory 1">
+				<eqn>20</eqn>
+				<units>Items</units>
+			</aux>
+			<aux name="Clothes gap 1">
+				<eqn>MAX(Desired_inventory_1 - Clothes_inventory_1, 0)</eqn>
+				<units>Items</units>
+			</aux>
+			<flow name="New clothes 1">
+				<eqn>MIN(
+MIN(Maximum_purchase_rate_1,  Clothes_gap_1),   Purchase_limit_1
+)</eqn>
+				<non_negative/>
+				<units>Items/months</units>
+			</flow>
+			<flow name="Discarded clothes 1">
+				<eqn>IF TIME &lt; Average_FF_clothes_lifespan
+THEN 0
+ELSE
+DELAY(New_clothes_1, Average_FF_clothes_lifespan)</eqn>
+				<non_negative/>
+				<units>Items/months</units>
+			</flow>
+			<aux name="Average FF\nprice per item">
+				<eqn>NORMAL(9, 3, 3)</eqn>
+				<units>English Pounds</units>
+			</aux>
+			<aux name="Average FF\nclothes lifespan">
+				<eqn>NORMAL(7, 2, 3)</eqn>
+				<units>Months</units>
+			</aux>
+			<flow name="New saving 1">
+				<eqn>0.05*Income_1</eqn>
+				<non_negative/>
+				<units>English Pounds/Month</units>
+			</flow>
+			<flow name="Spending\non clothes 1">
+				<eqn>New_clothes_1 * Average_FF_price_per_item</eqn>
+				<non_negative/>
+				<units>English Pounds/Month</units>
+			</flow>
+			<aux name="Maximum purchase\nrate 1">
+				<eqn>3</eqn>
+				<units>Items</units>
+			</aux>
+			<aux name="Income 1">
+				<eqn>850</eqn>
+				<units>English Pounds</units>
+			</aux>
+			<aux name="Purchase limit 1">
+				<eqn>INT(Savings_1/Average_FF_price_per_item)</eqn>
+				<units>Items</units>
+			</aux>
+			<aux name="Income 2">
+				<eqn>850</eqn>
+				<units>English Pounds</units>
+			</aux>
+			<aux name="Maximum purchase\nrate 2">
+				<eqn>3</eqn>
+				<units>Items</units>
+			</aux>
+			<flow name="Spending\non clothes 2">
+				<eqn>New_clothes_2 * Average_sustainable_price_per_item</eqn>
+				<non_negative/>
+				<units>English Pounds/Month</units>
+			</flow>
+			<flow name="New saving 2">
+				<eqn>0.05*Income_2</eqn>
+				<non_negative/>
+				<units>English Pounds/Month</units>
+			</flow>
+			<aux name="Average sustainable\nclothes lifespan">
+				<eqn>NORMAL(36, 2, 3)</eqn>
+				<units>Months</units>
+			</aux>
+			<aux name="Average sustainable\nprice per item">
+				<eqn>NORMAL(25, 3, 3)</eqn>
+				<units>English Pounds</units>
+			</aux>
+			<flow name="Discarded clothes 2">
+				<eqn>IF TIME &lt; Average_sustainable_clothes_lifespan
+THEN 0
+ELSE
+DELAY(New_clothes_2, Average_sustainable_clothes_lifespan)</eqn>
+				<non_negative/>
+				<units>Items/months</units>
+			</flow>
+			<flow name="New clothes 2">
+				<eqn>MIN(
+MIN(Maximum_purchase_rate_2, Clothes_gap_2), 
+Purchase_limit_2)</eqn>
+				<non_negative/>
+				<units>Items/months</units>
+			</flow>
+			<aux name="Clothes gap 2">
+				<eqn>MAX(Desired_inventory_2 - Clothes_inventory_2, 0)</eqn>
+				<units>Items</units>
+			</aux>
+			<aux name="Desired inventory 2">
+				<eqn>20</eqn>
+				<units>Items</units>
+			</aux>
+			<stock name="Clothes inventory 2">
+				<eqn>6</eqn>
+				<inflow>New_clothes_2</inflow>
+				<outflow>Discarded_clothes_2</outflow>
+				<non_negative/>
+				<units>Items</units>
+			</stock>
+			<stock name="Savings 2">
+				<eqn>500</eqn>
+				<inflow>New_saving_2</inflow>
+				<outflow>Spending_on_clothes_2</outflow>
+				<non_negative/>
+				<units>English Pounds</units>
+			</stock>
+			<aux name="Purchase limit 2">
+				<eqn>INT(Savings_2/Average_sustainable_price_per_item)</eqn>
+				<units>Items</units>
+			</aux>
+			<stock name="Total waste 1">
+				<eqn>0</eqn>
+				<inflow>Discarded_clothes_1</inflow>
+				<non_negative/>
+				<units>Items</units>
+			</stock>
+			<aux name="Total FF clothes">
+				<eqn>Clothes_inventory_1 + Total_waste_1</eqn>
+				<units>Items</units>
+			</aux>
+			<stock name="Total waste 2">
+				<eqn>0</eqn>
+				<inflow>Discarded_clothes_2</inflow>
+				<non_negative/>
+				<units>Items</units>
+			</stock>
+			<aux name="Total sustainable\nclothes">
+				<eqn>Total_waste_2 + Clothes_inventory_2</eqn>
+				<units>Items</units>
+			</aux>
+		</variables>
+		<views>
+			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+				<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_family="Arial" font_size="12pt"/>
+				<numeric_display color="blue" background="white" font_family="Arial" font_size="9pt" isee:transparent="false"/>
+				<graph color="black" background="white" font_family="Arial" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" legend_position="bottom" isee:transparent="false" axis_label_font_size="9pt"/>
+				<table color="black" background="#E0E0E0" text_align="right" font_family="Arial" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_text_align="center"/>
+				<button color="black" background="#E0E0E0" font_family="Arial" font_size="12pt" transparent="false" corner_radius="0" icon_side="top"/>
+				<isee:annotation color="black" background="#E0E0E0" font_family="Arial" font_size="12pt" transparent="false" corner_radius="0" icon_side="top" popup_background_color="#FFFECF" popup_text_align="left" popup_vertical_text_align="top"/>
+				<slider color="black" background="#E0E0E0" font_family="Arial" font_size="12pt" num_ticks="3" label_side="top" wrap_title="true" input_expands="true" input_width="100"/>
+				<knob color="#66CC66" background="#E0E0E0" font_family="Arial" font_size="12pt" label_side="bottom" wrap_title="true"/>
+				<numeric_input color="black" background="#E0E0E0" font_family="Arial" font_size="12pt" label_side="left" wrap_title="true" input_expands="false" input_width="100"/>
+				<switch color="black" background="#E0E0E0" font_family="Arial" font_size="12pt" label_side="top" wrap_title="true"/>
+				<options color="black" background="white" font_family="Arial" appearance="radio-buttons" arrangement="vertical"/>
+				<graphical_input color="black" background="#E0E0E0" font_family="Arial" font_size="12pt"/>
+				<group_input color="black" background="#E0E0E0" font_family="Arial" font_size="12pt"/>
+				<lamp color="black" background="white" font_family="Arial" font_size="9pt"/>
+			</style>
+			<view isee:show_pages="false" isee:name_only_modules="true" page_width="1123" page_height="793" isee:page_cols="3" isee:page_rows="2" isee:scroll_x="140" isee:scroll_y="151.25" zoom="80" isee:popup_graphs_are_comparative="true" type="stock_flow">
+				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
+					<stock color="blue" background="white" font_color="blue" font_family="Arial" font_size="14pt" label_side="top" label_angle="0">
+						<shape type="rectangle" width="45" height="35"/>
+					</stock>
+					<flow color="blue" background="white" font_color="blue" font_family="Arial" font_size="14pt" label_side="bottom" label_angle="0"/>
+					<module color="blue" background="white" font_color="blue" font_family="Arial" font_size="14pt" label_side="top" label_angle="0">
+						<shape type="name_only"/>
+					</module>
+					<aux color="blue" background="white" font_color="blue" font_family="Arial" font_size="14pt" label_side="bottom" label_angle="0">
+						<shape type="circle" radius="18"/>
+					</aux>
+					<group color="red" background="white" font_color="red" font_family="Arial" font_size="9pt"/>
+					<connector color="#FF007F" background="white" font_color="#FF007F" font_family="Arial" font_size="9pt" isee:thickness="1"/>
+					<text_box color="black" background="white" text_align="left" vertical_text_align="top" font_family="Arial" font_size="12pt"/>
+					<numeric_display color="blue" background="white" font_family="Arial" font_size="9pt" isee:transparent="false"/>
+					<graph color="black" background="white" font_family="Arial" font_size="12pt" axis_color="#666666" grid_color="#C8C8C8" legend_position="bottom" isee:transparent="false" axis_label_font_size="9pt"/>
+					<table color="black" background="#E0E0E0" text_align="right" font_family="Arial" font_size="12pt" orientation="vertical" wrap_text="false" isee:auto_fit="true" isee:use_alternate_row_colors="false" isee:unlimited_table_length="false" blank_column_width="80" column_width="160" isee:report_month_names="false" interval="1" report_balances="beginning" report_flows="instantaneous" header_text_align="center"/>
+				</style>
+				<stock font_family="Arial" x="538" y="375.333" name="Clothes inventory 1"/>
+				<stock font_family="Arial" x="445.833" y="536.333" name="Savings 1"/>
+				<aux font_family="Arial" x="322" y="114.916" name="Desired inventory 1"/>
+				<aux font_family="Arial" x="451.5" y="232.333" name="Clothes gap 1"/>
+				<connector uid="1" font_family="Arial" angle="121.17">
+					<from>Clothes_inventory_1</from>
+					<to>Clothes_gap_1</to>
+				</connector>
+				<flow font_family="Arial" x="407.25" y="384.333" name="New clothes 1">
+					<pts>
+						<pt x="299" y="384.333"/>
+						<pt x="515.5" y="384.333"/>
+					</pts>
+				</flow>
+				<flow font_family="Arial" label_side="top" label_angle="90" x="679" y="379.333" name="Discarded clothes 1">
+					<pts>
+						<pt x="560.5" y="379.333"/>
+						<pt x="809.5" y="379.333"/>
+					</pts>
+				</flow>
+				<aux font_weight="bold" font_color="#AA0000" font_family="Arial" x="506.5" y="681.333" name="Average FF\nprice per item"/>
+				<aux font_weight="bold" font_color="#AA0000" font_family="Arial" label_side="bottom" label_angle="270" x="769.33" y="493.333" name="Average FF\nclothes lifespan"/>
+				<connector uid="2" font_family="Arial" angle="128.392">
+					<from>Average_FF_clothes_lifespan</from>
+					<to>Discarded_clothes_1</to>
+				</connector>
+				<flow font_family="Arial" x="336.333" y="536.333" name="New saving 1">
+					<pts>
+						<pt x="249.333" y="536.333"/>
+						<pt x="423.333" y="536.333"/>
+					</pts>
+				</flow>
+				<flow font_family="Arial" x="538.833" y="536.333" name="Spending\non clothes 1">
+					<pts>
+						<pt x="468.333" y="536.333"/>
+						<pt x="633.333" y="536.333"/>
+					</pts>
+				</flow>
+				<connector uid="3" font_family="Arial" angle="310.882">
+					<from>New_clothes_1</from>
+					<to>Spending_on_clothes_1</to>
+				</connector>
+				<connector uid="4" font_family="Arial" angle="77.4295">
+					<from>Average_FF_price_per_item</from>
+					<to>Spending_on_clothes_1</to>
+				</connector>
+				<connector uid="5" font_family="Arial" angle="216.87">
+					<from>Clothes_gap_1</from>
+					<to>New_clothes_1</to>
+				</connector>
+				<aux font_family="Arial" x="263" y="241.333" width="18" height="18" name="Maximum purchase\nrate 1"/>
+				<connector uid="6" font_family="Arial" angle="315.266">
+					<from>Maximum_purchase_rate_1</from>
+					<to>New_clothes_1</to>
+				</connector>
+				<stacked_container uid="7" x="1081.67" y="90.3333" width="450" height="336.667">
+					<graph font_family="Arial" axis_label_font_size="9pt" x="1081.67" y="90.3333" width="450" height="336.667" type="time_series" show_grid="false" include_units_in_legend="false" plot_numbers="false" num_x_grid_lines="0" num_y_grid_lines="0" num_x_labels="5" num_y_labels="3" title="Graph" left_axis_multi_scale="false" left_axis_auto_scale="true" right_axis_multi_scale="false" right_axis_auto_scale="true">
+						<plot color="blue" pen_width="1" index="0" show_y_axis="true">
+							<entity name="Savings_1"/>
+						</plot>
+						<plot color="red" pen_style="dot_dashed" pen_width="1" index="1" show_y_axis="true">
+							<entity name="Savings_2"/>
+						</plot>
+					</graph>
+				</stacked_container>
+				<stacked_container uid="8" x="1603" y="89" width="447.333" height="339.333">
+					<graph font_family="Arial" axis_label_font_size="9pt" x="1603" y="89" width="447.333" height="339.333" type="time_series" show_grid="false" include_units_in_legend="false" plot_numbers="false" num_x_grid_lines="0" num_y_grid_lines="0" num_x_labels="5" num_y_labels="3" title="Graph" left_axis_multi_scale="false" left_axis_auto_scale="true" right_axis_multi_scale="false" right_axis_auto_scale="true">
+						<plot color="blue" pen_width="1" index="0" show_y_axis="true">
+							<entity name="Spending_on_clothes_1"/>
+						</plot>
+						<plot color="red" pen_style="dot_dashed" pen_width="1" index="1" show_y_axis="true">
+							<entity name="Spending_on_clothes_2"/>
+						</plot>
+					</graph>
+				</stacked_container>
+				<aux font_family="Arial" x="407.25" y="614.333" name="Income 1"/>
+				<connector uid="9" font_family="Arial" angle="132.277">
+					<from>Income_1</from>
+					<to>New_saving_1</to>
+				</connector>
+				<connector uid="10" font_family="Arial" angle="320.452">
+					<from>New_clothes_1</from>
+					<to>Discarded_clothes_1</to>
+				</connector>
+				<connector uid="11" font_family="Arial" angle="12.4433">
+					<from>Desired_inventory_1</from>
+					<to>Clothes_gap_1</to>
+				</connector>
+				<aux font_family="Arial" x="150" y="475.333" name="Purchase limit 1"/>
+				<connector uid="12" font_family="Arial" angle="145.406">
+					<from>Savings_1</from>
+					<to>Purchase_limit_1</to>
+				</connector>
+				<connector uid="13" font_family="Arial" angle="194.776">
+					<from>Average_FF_price_per_item</from>
+					<to>Purchase_limit_1</to>
+				</connector>
+				<connector uid="14" font_family="Arial" angle="19.4808">
+					<from>Purchase_limit_1</from>
+					<to>New_clothes_1</to>
+				</connector>
+				<aux font_family="Arial" x="371.666" y="1411.67" name="Income 2"/>
+				<aux font_family="Arial" x="299.333" y="1009.67" name="Maximum purchase\nrate 2"/>
+				<flow font_family="Arial" x="500.666" y="1322.67" name="Spending\non clothes 2">
+					<pts>
+						<pt x="425.666" y="1322.67"/>
+						<pt x="599.666" y="1322.67"/>
+					</pts>
+				</flow>
+				<flow font_family="Arial" x="298.166" y="1322.67" name="New saving 2">
+					<pts>
+						<pt x="215.666" y="1322.67"/>
+						<pt x="380.666" y="1322.67"/>
+					</pts>
+				</flow>
+				<connector uid="15" font_family="Arial" angle="129.551">
+					<from>Income_2</from>
+					<to>New_saving_2</to>
+				</connector>
+				<aux font_weight="bold" font_color="#AA0000" font_family="Arial" x="723.663" y="1322.67" name="Average sustainable\nclothes lifespan"/>
+				<aux font_weight="bold" font_color="#AA0000" font_family="Arial" label_side="bottom" label_angle="0" x="539.663" y="1457.67" name="Average sustainable\nprice per item"/>
+				<connector uid="16" font_family="Arial" angle="106.112">
+					<from>Average_sustainable_price_per_item</from>
+					<to>Spending_on_clothes_2</to>
+				</connector>
+				<flow font_family="Arial" label_side="top" label_angle="90" x="669.333" y="1135" name="Discarded clothes 2">
+					<pts>
+						<pt x="539.833" y="1135"/>
+						<pt x="810.833" y="1135"/>
+					</pts>
+				</flow>
+				<connector uid="17" font_family="Arial" angle="70.56">
+					<from>Average_sustainable_clothes_lifespan</from>
+					<to>Discarded_clothes_2</to>
+				</connector>
+				<flow font_family="Arial" x="388.917" y="1135" name="New clothes 2">
+					<pts>
+						<pt x="283" y="1135"/>
+						<pt x="494.833" y="1135"/>
+					</pts>
+				</flow>
+				<connector uid="18" font_family="Arial" angle="306.043">
+					<from>New_clothes_2</from>
+					<to>Spending_on_clothes_2</to>
+				</connector>
+				<connector uid="19" font_family="Arial" angle="305.556">
+					<from>Maximum_purchase_rate_2</from>
+					<to>New_clothes_2</to>
+				</connector>
+				<connector uid="20" font_family="Arial" angle="336.113">
+					<from>New_clothes_2</from>
+					<to>Discarded_clothes_2</to>
+				</connector>
+				<aux font_family="Arial" x="464.833" y="984.917" name="Clothes gap 2"/>
+				<connector uid="21" font_family="Arial" angle="216.87">
+					<from>Clothes_gap_2</from>
+					<to>New_clothes_2</to>
+				</connector>
+				<aux font_family="Arial" x="332.333" y="874.25" name="Desired inventory 2"/>
+				<connector uid="22" font_family="Arial" angle="12.4433">
+					<from>Desired_inventory_2</from>
+					<to>Clothes_gap_2</to>
+				</connector>
+				<stock font_family="Arial" x="517.333" y="1135" name="Clothes inventory 2"/>
+				<connector uid="23" font_family="Arial" angle="109.28">
+					<from>Clothes_inventory_2</from>
+					<to>Clothes_gap_2</to>
+				</connector>
+				<stock font_family="Arial" x="403.166" y="1331.67" name="Savings 2"/>
+				<aux font_family="Arial" x="158.333" y="1199.67" name="Purchase limit 2"/>
+				<connector uid="24" font_family="Arial" angle="118.851">
+					<from>Savings_2</from>
+					<to>Purchase_limit_2</to>
+				</connector>
+				<connector uid="25" font_family="Arial" angle="212.739">
+					<from>Average_sustainable_price_per_item</from>
+					<to>Purchase_limit_2</to>
+				</connector>
+				<connector uid="26" font_family="Arial" angle="15.6661">
+					<from>Purchase_limit_2</from>
+					<to>New_clothes_2</to>
+				</connector>
+				<stock font_family="Arial" x="832" y="379.333" name="Total waste 1"/>
+				<aux font_family="Arial" x="672.5" y="198.583" name="Total FF clothes"/>
+				<connector uid="27" font_family="Arial" angle="73.8557">
+					<from>Clothes_inventory_1</from>
+					<to>Total_FF_clothes</to>
+				</connector>
+				<connector uid="28" font_family="Arial" angle="107.447">
+					<from>Total_waste_1</from>
+					<to>Total_FF_clothes</to>
+				</connector>
+				<stock font_family="Arial" x="833.333" y="1138.67" name="Total waste 2"/>
+				<aux font_family="Arial" x="676.333" y="984.917" name="Total sustainable\nclothes"/>
+				<connector uid="29" font_family="Arial" angle="79.2157">
+					<from>Clothes_inventory_2</from>
+					<to>Total_sustainable_clothes</to>
+				</connector>
+				<connector uid="30" font_family="Arial" angle="90">
+					<from>Total_waste_2</from>
+					<to>Total_sustainable_clothes</to>
+				</connector>
+				<stacked_container uid="31" x="1603.25" y="469.333" width="446.833" height="336.667">
+					<graph font_family="Arial" axis_label_font_size="9pt" x="1603.25" y="469.333" width="446.833" height="336.667" type="time_series" show_grid="false" include_units_in_legend="false" plot_numbers="false" num_x_grid_lines="0" num_y_grid_lines="0" num_x_labels="5" num_y_labels="3" title="Graph" left_axis_multi_scale="false" left_axis_auto_scale="true" right_axis_multi_scale="false" right_axis_auto_scale="true">
+						<plot color="blue" pen_width="1" index="0" show_y_axis="true">
+							<entity name="Total_waste_1"/>
+						</plot>
+						<plot color="red" pen_style="dot_dashed" pen_width="1" index="1" show_y_axis="true">
+							<entity name="Total_waste_2"/>
+						</plot>
+					</graph>
+				</stacked_container>
+				<text_box font_weight="bold" font_family="Arial" font_size="22pt" uid="32" x="95.5" y="40.75" width="319.083" height="35.5">1. Fast Fashion (FF) solution</text_box>
+				<text_box font_weight="bold" font_family="Arial" font_size="22pt" uid="33" x="110.5" y="789.83" width="251.583" height="35.5">2. Sustainable solution</text_box>
+				<stacked_container uid="34" x="1083" y="472" width="447.333" height="331.333">
+					<graph font_family="Arial" axis_label_font_size="9pt" x="1083" y="472" width="447.333" height="331.333" type="time_series" show_grid="false" include_units_in_legend="false" plot_numbers="false" num_x_grid_lines="0" num_y_grid_lines="0" num_x_labels="5" num_y_labels="3" title="Graph" left_axis_multi_scale="false" left_axis_auto_scale="true" right_axis_multi_scale="false" right_axis_auto_scale="true">
+						<plot color="blue" pen_width="1" index="0" show_y_axis="true">
+							<entity name="Clothes_inventory_1"/>
+						</plot>
+						<plot color="red" pen_style="dot_dashed" pen_width="1" index="1" show_y_axis="true">
+							<entity name="Clothes_inventory_2"/>
+						</plot>
+					</graph>
+				</stacked_container>
+				<stacked_container uid="35" x="2131" y="89" width="445.333" height="339.333">
+					<graph font_family="Arial" axis_label_font_size="9pt" x="2131" y="89" width="445.333" height="339.333" type="time_series" show_grid="false" include_units_in_legend="false" plot_numbers="false" num_x_grid_lines="0" num_y_grid_lines="0" num_x_labels="5" num_y_labels="3" title="Graph" left_axis_multi_scale="false" left_axis_auto_scale="true" right_axis_multi_scale="false" right_axis_auto_scale="true">
+						<plot color="red" pen_style="dot_dashed" pen_width="1" index="0" show_y_axis="true">
+							<entity name="Total_FF_clothes"/>
+						</plot>
+						<plot color="fuchsia" pen_style="dotted" pen_width="1" index="1" show_y_axis="true">
+							<entity name="Total_sustainable_clothes"/>
+						</plot>
+					</graph>
+				</stacked_container>
+			</view>
+		</views>
+	</model>
+</xmile>
+
